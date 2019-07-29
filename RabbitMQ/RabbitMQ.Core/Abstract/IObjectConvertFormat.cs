@@ -8,5 +8,8 @@ namespace RabbitMQ.Core.Abstract
     {
         T JsonToObject<T>(string jsonString);
         string ObjectToJson<T>(T message);
+
+        T ParseObjectDataArray<T>(byte[] rawBytes);
+        
     }
 }

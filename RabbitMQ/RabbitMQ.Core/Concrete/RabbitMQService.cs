@@ -10,9 +10,7 @@ namespace RabbitMQ.Core.Concrete
     {
         public IRabbitMQConfiguration _RabbitMQConfiguration;
 
-        public RabbitMQService()
-        {
-        }
+         
 
         public RabbitMQService(IRabbitMQConfiguration RabbitMQConfiguration)
         {

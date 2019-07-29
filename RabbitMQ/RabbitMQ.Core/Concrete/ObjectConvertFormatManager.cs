@@ -20,6 +20,11 @@ namespace RabbitMQ.Core.Concrete
             return jsonString;
         }
 
-        
+        public T ParseObjectDataArray<T>(byte[] rawBytes)
+        {
+            var json = Encoding.UTF8.GetString(rawBytes);
+            return JsonToObject<T>(json);
+        }
+
     }
 }

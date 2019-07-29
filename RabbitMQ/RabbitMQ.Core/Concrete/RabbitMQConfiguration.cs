@@ -16,13 +16,13 @@ namespace RabbitMQ.Core.Concrete
         }
 
 
-        public string HostName => _config.GetSection("HostName").Value;
+        public string HostName => "localhost";// _config.GetSection("HostName").Value;
 
 
-        public string UserName => _config.GetSection("UserName").Value;
+        public string UserName => "guest";// _config.GetSection("UserName").Value;
 
 
-        public string Password => _config.GetSection("Password").Value;
-         
+        public string Password => "guest";// _config.GetSection("Password").Value;
+
     }
 }
