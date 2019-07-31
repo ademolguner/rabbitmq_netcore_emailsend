@@ -10,7 +10,7 @@ namespace RabbitMQ.Core.Concrete
     {
         public IRabbitMQConfiguration _RabbitMQConfiguration;
 
-         
+
 
         public RabbitMQService(IRabbitMQConfiguration RabbitMQConfiguration)
         {
@@ -24,18 +24,20 @@ namespace RabbitMQ.Core.Concrete
                 UserName = _RabbitMQConfiguration.UserName,
                 Password = _RabbitMQConfiguration.Password
             };
-            using (IConnection RabbitMQConnection = factory.CreateConnection())
-            {
-                return RabbitMQConnection;
-            }
+            //  using (IConnection RabbitMQConnection = factory.CreateConnection())
+            // {
+            return factory.CreateConnection();
+              //  return RabbitMQConnection;
+              // }
         }
 
         public IModel GetModel(IConnection connection)
         {
-            using (IModel channel = connection.CreateModel())
-            {
-                return channel;
-            }
+            //using (IModel channel = connection.CreateModel())
+            //{
+            //    return channel;
+            //}
+            return connection.CreateModel();
         }
     }
 }

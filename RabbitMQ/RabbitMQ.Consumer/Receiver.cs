@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using Newtonsoft.Json;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Core.Abstract;
 using RabbitMQ.Core.Consts;
@@ -16,14 +17,18 @@ namespace RabbitMQ.Consumer
         private readonly IRabbitMQServices _rabbitMQServices;
         private readonly IRabbitMQConfiguration _rabbitMQConfiguration;
         private readonly IObjectConvertFormat _objectConvertFormat;
+        private readonly IMailSender _mailSender;
         public Receiver(
             IRabbitMQServices rabbitMQServices,
             IRabbitMQConfiguration rabbitMQConfiguration,
-            IObjectConvertFormat objectConvertFormat)
+            IMailSender mailSender
+            // IObjectConvertFormat objectConvertFormat
+            )
         {
             _rabbitMQServices = rabbitMQServices;
             _rabbitMQConfiguration = rabbitMQConfiguration;
-            _objectConvertFormat = objectConvertFormat;
+            _mailSender = mailSender ?? throw new ArgumentNullException(nameof(mailSender));
+            //_objectConvertFormat = objectConvertFormat;
         }
 
 
@@ -39,46 +44,47 @@ namespace RabbitMQ.Consumer
         // eventler - olaylar
         public event EventHandler<MailMessageData> MessageReceived;
         public event EventHandler<MailSendResult> MessageProcessed;
-        private readonly IMailSender _mailSender;
+        
         private EventingBasicConsumer _consumer;
         private IModel _channel;
         private IConnection _connection;
 
-
-        public Receiver(IMailSender mailSender)
-        {
-            _mailSender = mailSender ?? throw new ArgumentNullException(nameof(mailSender));
-        }
+         
 
         // Mesaj almaya başlanır
         public void Start()
         {
-            _semaphore = new SemaphoreSlim(ParallelThreadsCount);
-
-            var factory = new ConnectionFactory() { HostName = _rabbitMQConfiguration.HostName };
-            using (var _connection = _rabbitMQServices.GetConnection())
-            using (var _channel = _connection.CreateModel())
+            try
             {
+                _semaphore = new SemaphoreSlim(ParallelThreadsCount);
 
+                var factory = new ConnectionFactory() { HostName = _rabbitMQConfiguration.HostName };
+                using (var _connection = _rabbitMQServices.GetConnection())
+                using (var _channel = _connection.CreateModel())
+                {
+                    _channel.QueueDeclare(queue: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),     //
+                                         durable: true,     //
+                                         exclusive: false,  //
+                                         autoDelete: false, //
+                                         arguments: null);  //
 
-                _channel.QueueDeclare(queue: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),     //
-                                     durable: true,     //
-                                     exclusive: false,  //
-                                     autoDelete: false, //
-                                     arguments: null);  //
+                    //Onaylanmayan maksimum mesaj sayısını sınırlayın.
+                    //Aracı, alınana kadar yeni bir mesaj vermez.
+                    //daha önce kabul edilenlerden birinin alındığına dair onay
+                    _channel.BasicQos(0, ParallelThreadsCount, false);
 
-                //Onaylanmayan maksimum mesaj sayısını sınırlayın.
-                //Aracı, alınana kadar yeni bir mesaj vermez.
-                //daha önce kabul edilenlerden birinin alındığına dair onay
-                _channel.BasicQos(0, ParallelThreadsCount, false);
-
-                _consumer = new EventingBasicConsumer(_channel);
-                _consumer.Received += Consumer_Received;
-                _channel.BasicConsume(queue: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
-                                         autoAck: false,         /* bir mesajı aldıktan sonra bunu anladığına 
+                    _consumer = new EventingBasicConsumer(_channel);
+                    _consumer.Received += Consumer_Received;
+                    _channel.BasicConsume(queue: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
+                                             autoAck: false,         /* bir mesajı aldıktan sonra bunu anladığına 
                                                                 dair(acknowledgment) kuyruğa bildirimde bulunur ya da timeout gibi vakalar oluştuğunda 
                                                                 mesajı geri çevirmek(Discard) veya yeniden kuyruğa aldırmak(Re-Queue) için dönüşler yapar*/
-                                         consumer: _consumer);
+                                             consumer: _consumer);
+                }
+            }
+            catch (Exception ex)
+            {
+                 
             }
         }
 
@@ -88,7 +94,7 @@ namespace RabbitMQ.Consumer
             {
                 _semaphore.Wait();
 
-                var message = _objectConvertFormat.ParseObjectDataArray<MailMessageData>(ea.Body);
+                MailMessageData message = JsonConvert.DeserializeObject<MailMessageData>(Encoding.UTF8.GetString(ea.Body));// _objectConvertFormat.JsonToObject<MailMessageData>(Encoding.UTF8.GetString(ea.Body));// _objectConvertFormat.ParseObjectDataArray<MailMessageData>(ea.Body);
                 MessageReceived?.Invoke(this, message);
                 // E-Posta akışını başlatma yeri
                 Task.Run(() =>
@@ -111,7 +117,7 @@ namespace RabbitMQ.Consumer
             }
             catch (Exception ex)
             {
-                string hata = ex.InnerException.ToString();
+                string hata = ex.Message.ToString();
             }
         }
 

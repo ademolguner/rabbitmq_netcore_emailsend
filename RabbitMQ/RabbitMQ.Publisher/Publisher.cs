@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using Newtonsoft.Json;
+using RabbitMQ.Client;
 using RabbitMQ.Core.Abstract;
 using RabbitMQ.Core.Concrete;
 using RabbitMQ.Core.Consts;
@@ -49,7 +50,7 @@ namespace RabbitMQ.Publisher
 
                     foreach (var message in messages)
                     {
-                        var body = Encoding.UTF8.GetBytes(_objectConvertFormatManager.ObjectToJson<MailMessageData>(message));
+                        var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));// _objectConvertFormatManager.ObjectToJson<MailMessageData>(message));
                         channel.BasicPublish(exchange: "",
                                              routingKey: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
                                              basicProperties: properties,
@@ -59,7 +60,7 @@ namespace RabbitMQ.Publisher
             }
             catch (Exception ex)
             {
-                string hata = ex.InnerException.ToString();
+                //string hata = ex.InnerException.ToString();
             }
         }
     }

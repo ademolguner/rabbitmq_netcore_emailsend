@@ -5,6 +5,7 @@ using RabbitMQ.Core.Entities;
 using RabbitMQ.WebUI.Models;
 using RabbitMQ.Core.Abstract;
 using RabbitMQ.Core.Concrete;
+using RabbitMQ.Consumer;
 
 namespace RabbitMQ.WebUI.Controllers
 {
@@ -37,8 +38,13 @@ namespace RabbitMQ.WebUI.Controllers
             Publisher.Publisher publisher = new Publisher.Publisher(_rabbitMQServices, _rabbitMQConfiguration);
             publisher.Enqueue(PrepareMessages());
 
+            var receiver = new Receiver(_rabbitMQServices, _rabbitMQConfiguration,new MailSender(@"SmtpConfig.json"));
+            receiver.Start();
+                
             return View();
         }
+
+        
 
         private IEnumerable<MailMessageData> PrepareMessages()
         {

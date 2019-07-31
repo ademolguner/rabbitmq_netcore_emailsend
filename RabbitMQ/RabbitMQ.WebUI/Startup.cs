@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RabbitMQ.Consumer;
 using RabbitMQ.Core.Abstract;
 using RabbitMQ.Core.Concrete;
 
@@ -42,7 +43,7 @@ namespace RabbitMQ.WebUI
             services.AddScoped<IRabbitMQServices, RabbitMQService>();
             services.AddScoped<IRabbitMQConfiguration, RabbitMQConfiguration>();
             services.AddScoped<IObjectConvertFormat, ObjectConvertFormatManager>();
-            //services.AddScoped<IMailSender, MailSender>();
+            services.AddScoped<IMailSender, MailSender>();
 
 
 
