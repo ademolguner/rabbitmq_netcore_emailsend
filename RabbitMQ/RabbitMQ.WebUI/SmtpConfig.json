@@ -1,7 +1,0 @@
-{
-  "Host": "smtp.gmail.com",
-  "Post": "587",
-  "User": "deneme@gmail.com",
-  "Password": "vizirvizir",
-  "UseSSL": "true"
-}
