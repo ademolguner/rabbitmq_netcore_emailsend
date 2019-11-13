@@ -38,10 +38,17 @@ namespace RabbitMQ.WebUI.Controllers
                 Title = "RabbitMQ Mail Gönderim İşlemi"
             };
 
+            //kuyruğa mail gönderim olayı tetikleme
             Publisher.Publisher publisher = new Publisher.Publisher(_rabbitMQServices);
             publisher.Enqueue(PrepareMessages());
 
-            var receiver = new Receiver(_rabbitMQServices, _rabbitMQConfiguration, new MailSender(MailConsts.SmtpFileRoot, _objectConvertFormat), _objectConvertFormat);
+            // kuyruktan mail okuma ve gerekli işlemleri yapması için olayın tetiklenmesi.
+            var receiver = new Receiver(
+                                            _rabbitMQServices, 
+                                            _rabbitMQConfiguration, 
+                                            new MailSender(MailConsts.SmtpFileRoot, _objectConvertFormat), 
+                                            _objectConvertFormat
+                                        );
             receiver.Start();
             
             return View();

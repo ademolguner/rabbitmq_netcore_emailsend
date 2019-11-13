@@ -56,16 +56,12 @@ namespace RabbitMQ.Consumer
                 _connection = _rabbitMQServices.GetConnection();
                 _channel = _connection.CreateModel();
                 _channel.QueueDeclare(queue: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
-                                     durable: true,     //
-                                     exclusive: false,  //
-                                     autoDelete: false, //
-                                     arguments: null);  //
+                                     durable: true,     
+                                     exclusive: false,  
+                                     autoDelete: false, 
+                                     arguments: null);  
 
-                //Onaylanmayan maksimum mesaj sayısını sınırlayın.
-                //Aracı, alınana kadar yeni bir mesaj vermez.
-                //daha önce kabul edilenlerden birinin alındığına dair onay
                 _channel.BasicQos(0, RabbitMQConsts.ParallelThreadsCount, false);
-
                 _consumer = new EventingBasicConsumer(_channel);
                 _consumer.Received += Consumer_Received;
                 _channel.BasicConsume(queue: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
@@ -105,14 +101,14 @@ namespace RabbitMQ.Consumer
                     {
                         // Teslimat Onayı
                         _channel.BasicAck(ea.DeliveryTag, false);
-                        // akışı thread i serbest bırakıyoruz ek thread alabiliriz
+                        // akışı - thread'i serbest bırakıyoruz ek thread alabiliriz.
                         _semaphore.Release();
                     }
                 });
             }
             catch (Exception ex)
             {
-                string hata = ex.Message.ToString();
+                throw new Exception(ex.InnerException.Message.ToString());
             }
         }
 

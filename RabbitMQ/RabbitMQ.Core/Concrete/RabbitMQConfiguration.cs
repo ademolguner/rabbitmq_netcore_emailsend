@@ -8,21 +8,14 @@ namespace RabbitMQ.Core.Concrete
 {
     public class RabbitMQConfiguration : IRabbitMQConfiguration
     {
-
-        private readonly IConfiguration _config;
-        public RabbitMQConfiguration()
+        public IConfiguration Configuration { get; }
+        public RabbitMQConfiguration(IConfiguration configuration)
         {
-            _config = new ConfigurationBuilder().AddJsonFile("../appsettings.json", true, true).Build();
+            Configuration = configuration;
         }
-
-
-        public string HostName => "localhost";// _config.GetSection("HostName").Value;
-
-
-        public string UserName => "guest";// _config.GetSection("UserName").Value;
-
-
-        public string Password => "guest";// _config.GetSection("Password").Value;
-
+        public string HostName => Configuration.GetSection("RabbitMQConfiguration:HostName").Value;
+        public string UserName => Configuration.GetSection("RabbitMQConfiguration:UserName").Value;
+        public string Password => Configuration.GetSection("RabbitMQConfiguration:Password").Value;
+       
     }
 }
