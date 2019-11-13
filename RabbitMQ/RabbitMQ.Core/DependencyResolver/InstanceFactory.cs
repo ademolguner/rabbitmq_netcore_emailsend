@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ninject;
 
-namespace RabbitMQ.Core.DependencyRresolver
+namespace RabbitMQ.Core.DependencyResolver
 {
     public class InstanceFactory
     {

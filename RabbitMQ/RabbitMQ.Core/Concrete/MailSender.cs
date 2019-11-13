@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RabbitMQ.Core.Abstract;
+using RabbitMQ.Core.Consts;
 using RabbitMQ.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,23 +11,16 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RabbitMQ.Consumer
+namespace RabbitMQ.Core.Concrete
 {
     public class MailSender : IMailSender
     {
-
-
-        public string SmtpConfigPath { get; set; }
-        public int SendTimeout { get; set; } = 250;
-        public MailSender(string smtpConfigPath)
+        
+        private readonly SmtpConfig _smtpConfig;
+        public MailSender(string smtpConfigPath, IObjectConvertFormat objectConvertFormat)
         {
-            SmtpConfigPath = smtpConfigPath;
+            _smtpConfig = objectConvertFormat.JsonToObject<SmtpConfig>(File.ReadAllText(smtpConfigPath));
         }
-        public SmtpConfig GetConfig()
-        {
-            return JsonConvert.DeserializeObject<SmtpConfig>(File.ReadAllText(SmtpConfigPath));
-        }
-
 
         public async Task<MailSendResult> SendMailAsync(MailMessageData emailMessage)
         {
@@ -34,10 +28,10 @@ namespace RabbitMQ.Consumer
             MailMessage mailMessage = emailMessage.GetMailMessage();
             try
             {
-                using (var client = CreateSmtpClient(GetConfig()))
+                using (var client = CreateSmtpClient(_smtpConfig))
                 {
                     await client.SendMailAsync(mailMessage);
-                    string resultMessage = $"totooo {string.Join(",", mailMessage.To)}.";
+                    string resultMessage = $"donus mesajı metni  {string.Join(",", mailMessage.To)}.";
                     result = new MailSendResult(mailMessage, true, resultMessage);
                     Console.WriteLine("EmailRabbitMQProcessor running => resultMessage to: " + mailMessage.To);
                 }
@@ -52,25 +46,26 @@ namespace RabbitMQ.Consumer
             }
             finally
             {
-                Thread.Sleep(SendTimeout);
+                Thread.Sleep(MailConsts.SendTimeout);
             }
             return result;
         }
 
-
         private SmtpClient CreateSmtpClient(SmtpConfig config)
         {
-            SmtpClient client = new SmtpClient(config.Host, config.Port);
-            client.EnableSsl = config.UseSSL;
-
-            client.UseDefaultCredentials = !(string.IsNullOrWhiteSpace(config.User) && string.IsNullOrWhiteSpace(config.Password));
+            SmtpClient client = new SmtpClient(config.Host, config.Port)
+            {
+                EnableSsl = config.UseSSL,
+                UseDefaultCredentials = !(string.IsNullOrWhiteSpace(config.User) && string.IsNullOrWhiteSpace(config.Password))
+            };
             if (client.UseDefaultCredentials == true)
             {
                 client.Credentials = new NetworkCredential(config.User, config.Password);
             }
-
             return client;
         }
+
+
 
        
     }

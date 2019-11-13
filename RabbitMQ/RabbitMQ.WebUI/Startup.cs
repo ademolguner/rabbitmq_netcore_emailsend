@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Consumer;
 using RabbitMQ.Core.Abstract;
 using RabbitMQ.Core.Concrete;
+using RabbitMQ.Core.Data;
+using RabbitMQ.Core.Entities;
 
 namespace RabbitMQ.WebUI
 {
@@ -44,6 +46,7 @@ namespace RabbitMQ.WebUI
             services.AddScoped<IRabbitMQConfiguration, RabbitMQConfiguration>();
             services.AddScoped<IObjectConvertFormat, ObjectConvertFormatManager>();
             services.AddScoped<IMailSender, MailSender>();
+            services.AddScoped<IDataModel<User>, UsersDataModel>();
 
 
 

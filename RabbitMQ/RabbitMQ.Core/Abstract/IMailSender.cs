@@ -8,7 +8,6 @@ namespace RabbitMQ.Core.Abstract
 {
     public interface IMailSender
     {
-        int SendTimeout { get; set; }
         Task<MailSendResult> SendMailAsync(MailMessageData emailMessage);
     }
 }

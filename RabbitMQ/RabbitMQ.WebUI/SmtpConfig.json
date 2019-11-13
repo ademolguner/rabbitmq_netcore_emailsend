@@ -1,0 +1,7 @@
+{
+  "Host" : "smtp.gmail.com",
+  "Port" : "587",
+  "User":"ademolguner@gmail.com",
+  "Password":"Besiktas1903",   
+  "UseSSL": "true"
+}

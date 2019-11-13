@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RabbitMQ.Consumer
+namespace RabbitMQ.Core.Entities
 {
     public class SmtpConfig
     {

@@ -13,31 +13,23 @@ namespace RabbitMQ.Publisher
     public class Publisher
     {
         private readonly IRabbitMQServices _rabbitMQServices;
-        private readonly IRabbitMQConfiguration _rabbitMQConfiguration;
-        private readonly ObjectConvertFormatManager _objectConvertFormatManager;
-
-
-
-        public Publisher(IRabbitMQServices rabbitMQServices, IRabbitMQConfiguration rabbitMQConfiguration)
+         
+        public Publisher(IRabbitMQServices rabbitMQServices)
         {
             _rabbitMQServices = rabbitMQServices;
-            _rabbitMQConfiguration = rabbitMQConfiguration;
         }
 
-        // yaşam süresi
-        public int MessagesTTL { get; set; } = 1000 * 60 * 60 * 2;
-
-
-        // publisher işlemi
+        /// <summary>
+        ///  publisher işlemi
+        /// </summary>
+        /// <param name="messages"></param>
         public void Enqueue(IEnumerable<MailMessageData> messages)
         {
             try
             {
-                
                 using (var connection = _rabbitMQServices.GetConnection())
                 using (var channel = connection.CreateModel())
                 {
-                     
                     channel.QueueDeclare(queue: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
                                          durable: true,      // ile in-memory mi yoksa fiziksel olarak mı saklanacağı belirlenir.
                                          exclusive: false,   // yalnızca bir bağlantı tarafından kullanılır ve bu bağlantı kapandığında sıra silinir - özel olarak işaretlenirse silinmez
@@ -45,12 +37,12 @@ namespace RabbitMQ.Publisher
                                          arguments: null);   // isteğe bağlı; eklentiler tarafından kullanılır ve TTL mesajı, kuyruk uzunluğu sınırı, vb. 
 
                     var properties = channel.CreateBasicProperties();
-                    properties.Persistent = true;  // kalıcı
-                    properties.Expiration = MessagesTTL.ToString();
+                    properties.Persistent = true; 
+                    properties.Expiration = RabbitMQConsts.MessagesTTL.ToString();
 
                     foreach (var message in messages)
                     {
-                        var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));// _objectConvertFormatManager.ObjectToJson<MailMessageData>(message));
+                        var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
                         channel.BasicPublish(exchange: "",
                                              routingKey: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
                                              basicProperties: properties,
@@ -60,7 +52,7 @@ namespace RabbitMQ.Publisher
             }
             catch (Exception ex)
             {
-                //string hata = ex.InnerException.ToString();
+                throw new Exception(ex.InnerException.Message.ToString());
             }
         }
     }

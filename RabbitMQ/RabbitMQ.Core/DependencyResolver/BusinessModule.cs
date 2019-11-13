@@ -8,7 +8,7 @@ using Ninject.Modules;
 using RabbitMQ.Core.Abstract;
 using RabbitMQ.Core.Concrete;
 
-namespace RabbitMQ.Core.DependencyRresolver
+namespace RabbitMQ.Core.DependencyResolver
 {
     public class BusinessModule : NinjectModule
     {
@@ -16,7 +16,7 @@ namespace RabbitMQ.Core.DependencyRresolver
         {
             Bind<IRabbitMQServices>().To<RabbitMQService>().InSingletonScope();
             Bind<IRabbitMQConfiguration>().To<RabbitMQConfiguration>().InSingletonScope();
-            Bind<IObjectConvertFormat>().To<ObjectConvertFormatManager>().InSingletonScope(); 
+            Bind<IObjectConvertFormat>().To<ObjectConvertFormatManager>().InSingletonScope();
         }
     }
 }
