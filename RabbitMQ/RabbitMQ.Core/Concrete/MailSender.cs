@@ -16,19 +16,24 @@ namespace RabbitMQ.Core.Concrete
     public class MailSender : IMailSender
     {
         
-        private readonly SmtpConfig _smtpConfig;
-        public MailSender(string smtpConfigPath, IObjectConvertFormat objectConvertFormat)
+        //private readonly SmtpConfig _smtpConfig;
+        private readonly ISmtpConfiguration _smtpConfiguration;
+        private readonly IObjectConvertFormat _objectConvertFormat;
+        public MailSender(ISmtpConfiguration smtpConfiguration, IObjectConvertFormat objectConvertFormat)
         {
-            _smtpConfig = objectConvertFormat.JsonToObject<SmtpConfig>(File.ReadAllText(smtpConfigPath));
+            //_smtpConfig = objectConvertFormat.JsonToObject<SmtpConfig>(File.ReadAllText(smtpConfigPath));
+            _smtpConfiguration = smtpConfiguration;
+            _objectConvertFormat = objectConvertFormat;
         }
 
         public async Task<MailSendResult> SendMailAsync(MailMessageData emailMessage)
         {
             MailSendResult result;
             MailMessage mailMessage = emailMessage.GetMailMessage();
+            mailMessage.From = new MailAddress(_smtpConfiguration.User);
             try
             {
-                using (var client = CreateSmtpClient(_smtpConfig))
+                using (var client = CreateSmtpClient(_smtpConfiguration.GetSmtpConfig()))
                 {
                     await client.SendMailAsync(mailMessage);
                     string resultMessage = $"donus mesajı metni  {string.Join(",", mailMessage.To)}.";

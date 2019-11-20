@@ -1,20 +1,19 @@
 ﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Core.Abstract;
-using RabbitMQ.Core.Concrete;
 using RabbitMQ.Core.Consts;
 using RabbitMQ.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RabbitMQ.Publisher
+namespace RabbitMQ.Core.Concrete
 {
-    public class Publisher
+    public class PublisherManager : IPublisherService
     {
-        private readonly IRabbitMQServices _rabbitMQServices;
-         
-        public Publisher(IRabbitMQServices rabbitMQServices)
+        private readonly IRabbitMQService _rabbitMQServices;
+
+        public PublisherManager(IRabbitMQService rabbitMQServices)
         {
             _rabbitMQServices = rabbitMQServices;
         }
@@ -37,7 +36,7 @@ namespace RabbitMQ.Publisher
                                          arguments: null);   // isteğe bağlı; eklentiler tarafından kullanılır ve TTL mesajı, kuyruk uzunluğu sınırı, vb. 
 
                     var properties = channel.CreateBasicProperties();
-                    properties.Persistent = true; 
+                    properties.Persistent = true;
                     properties.Expiration = RabbitMQConsts.MessagesTTL.ToString();
 
                     foreach (var message in messages)

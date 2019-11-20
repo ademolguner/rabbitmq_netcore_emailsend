@@ -5,17 +5,59 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\js\i18n\defaults-am_ET.js" />
+    <None Include="wwwroot\js\i18n\defaults-ar_AR.js" />
+    <None Include="wwwroot\js\i18n\defaults-bg_BG.js" />
+    <None Include="wwwroot\js\i18n\defaults-cs_CZ.js" />
+    <None Include="wwwroot\js\i18n\defaults-da_DK.js" />
+    <None Include="wwwroot\js\i18n\defaults-de_DE.js" />
+    <None Include="wwwroot\js\i18n\defaults-en_US.js" />
+    <None Include="wwwroot\js\i18n\defaults-es_CL.js" />
+    <None Include="wwwroot\js\i18n\defaults-es_ES.js" />
+    <None Include="wwwroot\js\i18n\defaults-et_EE.js" />
+    <None Include="wwwroot\js\i18n\defaults-eu.js" />
+    <None Include="wwwroot\js\i18n\defaults-fa_IR.js" />
+    <None Include="wwwroot\js\i18n\defaults-fi_FI.js" />
+    <None Include="wwwroot\js\i18n\defaults-fr_FR.js" />
+    <None Include="wwwroot\js\i18n\defaults-hr_HR.js" />
+    <None Include="wwwroot\js\i18n\defaults-hu_HU.js" />
+    <None Include="wwwroot\js\i18n\defaults-id_ID.js" />
+    <None Include="wwwroot\js\i18n\defaults-it_IT.js" />
+    <None Include="wwwroot\js\i18n\defaults-ja_JP.js" />
+    <None Include="wwwroot\js\i18n\defaults-kh_KM.js" />
+    <None Include="wwwroot\js\i18n\defaults-ko_KR.js" />
+    <None Include="wwwroot\js\i18n\defaults-lt_LT.js" />
+    <None Include="wwwroot\js\i18n\defaults-lv_LV.js" />
+    <None Include="wwwroot\js\i18n\defaults-nb_NO.js" />
+    <None Include="wwwroot\js\i18n\defaults-nl_NL.js" />
+    <None Include="wwwroot\js\i18n\defaults-pl_PL.js" />
+    <None Include="wwwroot\js\i18n\defaults-pt_BR.js" />
+    <None Include="wwwroot\js\i18n\defaults-pt_PT.js" />
+    <None Include="wwwroot\js\i18n\defaults-ro_RO.js" />
+    <None Include="wwwroot\js\i18n\defaults-ru_RU.js" />
+    <None Include="wwwroot\js\i18n\defaults-sk_SK.js" />
+    <None Include="wwwroot\js\i18n\defaults-sl_SI.js" />
+    <None Include="wwwroot\js\i18n\defaults-sv_SE.js" />
+    <None Include="wwwroot\js\i18n\defaults-tr_TR.js" />
+    <None Include="wwwroot\js\i18n\defaults-ua_UA.js" />
+    <None Include="wwwroot\js\i18n\defaults-vi_VN.js" />
+    <None Include="wwwroot\js\i18n\defaults-zh_CN.js" />
+    <None Include="wwwroot\js\i18n\defaults-zh_TW.js" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
   </ItemGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\RabbitMQ.Consumer\RabbitMQ.Consumer.csproj" />
     <ProjectReference Include="..\RabbitMQ.Core\RabbitMQ.Core.csproj" />
-    <ProjectReference Include="..\RabbitMQ.Publisher\RabbitMQ.Publisher.csproj" />
   </ItemGroup>
 
 </Project>

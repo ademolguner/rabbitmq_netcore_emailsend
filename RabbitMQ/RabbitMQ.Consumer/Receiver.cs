@@ -24,12 +24,13 @@ namespace RabbitMQ.Consumer
         private IModel _channel;
         private IConnection _connection;
 
-        private readonly IRabbitMQServices _rabbitMQServices;
+        private readonly IRabbitMQService _rabbitMQServices;
         private readonly IRabbitMQConfiguration _rabbitMQConfiguration;
         private readonly IObjectConvertFormat _objectConvertFormat;
         private readonly IMailSender _mailSender;
+
         public Receiver(
-            IRabbitMQServices rabbitMQServices,
+            IRabbitMQService rabbitMQServices,
             IRabbitMQConfiguration rabbitMQConfiguration,
             IMailSender mailSender,
             IObjectConvertFormat objectConvertFormat

@@ -1,0 +1,115 @@
+﻿@model RabbitMQ.WebUI.ViewModel.PostMailViewModel
+@{
+    ViewData["Title"] = "MailSend";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ 
+
+<link href="~/css/bootstrap-select.css" rel="stylesheet" />
+
+<h1 style="margin-left: calc(110% - 75%);">Mail Gönder</h1>
+
+@using (Html.BeginForm("MailSend", "Home", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    <div id="contactForm">
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Baslık</label>
+                        <div class="col-md-9">
+                            <input type="text" asp-for="@Model.Post.Title"   required class="form-control" placeholder="Baslık" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Mesajınız</label>
+                        <div class="col-md-9" style="padding-top: 7px;">
+                            <textarea asp-for="@Model.Post.Content"   required class="form-control" placeholder="Mesajınız" value="" rows="10"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Kişiler</label>
+                        <div class="col-md-9">
+                            
+                             
+                                <select class="selectpicker form-control" asp-for="@Model.Users"   data-live-search="true" title="Mail gönderilecek kişileri seçiniz." data-hide-disabled="true" data-actions-box="true" multiple>
+                                    @foreach (var item in Model.Users)
+                                    {
+                                        <option value="@item.UserId"> @item.FirstName   @item.LastName </option>
+                                    }
+                                </select> 
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+            <!--/row-->
+        </div>
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-offset-10 col-md-9">
+                        <button type="submit" class="btn">Gönder</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+ 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="~/js/bootstrap-select.js"></script>
+
+<script type="text/javascript">
+    function createOptions(number) {
+        var options = [], _options='';
+
+        for (var i = 0; i < number; i++) {
+            var option = '<option value="' + i + '">Option ' + i + '</option>';
+            options.push(option);
+        }
+
+        _options = options.join('');
+
+        $('#number')[0].innerHTML = _options;
+        $('#number-multiple')[0].innerHTML = _options;
+
+
+        $('#number2')[0].innerHTML = _options;
+        $('#number2-multiple')[0].innerHTML = _options;
+    }
+
+    var mySelect = $('#first-disabled2');
+
+    //createOptions(4000);
+
+    $('#special').on('click', function () {
+        mySelect.find('option:selected').prop('disabled', true);
+        mySelect.selectpicker('refresh');
+    });
+
+    $('#special2').on('click', function () {
+        mySelect.find('option:disabled').prop('disabled', false);
+        mySelect.selectpicker('refresh');
+    });
+
+    $('#basic2').selectpicker({
+        liveSearch: true,
+        maxOptions: 1
+    });
+</script>

@@ -4,69 +4,85 @@ using Microsoft.AspNetCore.Mvc;
 using RabbitMQ.Core.Entities;
 using RabbitMQ.WebUI.Models;
 using RabbitMQ.Core.Abstract;
-using RabbitMQ.Core.Concrete;
-using RabbitMQ.Consumer;
-using RabbitMQ.Core.Consts;
 using RabbitMQ.Core.Data;
 using System.Linq;
+using RabbitMQ.WebUI.ViewModel;
 
 namespace RabbitMQ.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IRabbitMQServices _rabbitMQServices;
-        private readonly IRabbitMQConfiguration _rabbitMQConfiguration;
-        private readonly IObjectConvertFormat _objectConvertFormat;
-        private Post post = new Post();
-        private List<User> users = new List<User>();
+        //private readonly IRabbitMQService _rabbitMQServices;
+        //private readonly IRabbitMQConfiguration _rabbitMQConfiguration;
+        //private readonly IObjectConvertFormat _objectConvertFormat;
+        private readonly ISmtpConfiguration _smtpConfig;
+        private readonly IPublisherService _publisherService;
+        //private readonly IConsumerService  _consumerService;
+        //private readonly IMailSender _mailSender;
+        //public  Post _post = new Post();
+        //public  List<User> _users = new List<User>();
         private readonly IDataModel<User> _userListData;
-        public HomeController(IRabbitMQServices rabbitMQServices, IRabbitMQConfiguration rabbitMQConfiguration, IObjectConvertFormat objectConvertFormat, IDataModel<User> userListData)
+        public HomeController(
+            // IRabbitMQService rabbitMQServices
+            //, IRabbitMQConfiguration rabbitMQConfiguration
+            //, IObjectConvertFormat objectConvertFormat
+             IDataModel<User> userListData
+            , ISmtpConfiguration smtpConfig
+            , IPublisherService publisherService
+            //, IConsumerService consumerService
+            //, IMailSender mailSender
+            )
         {
-            _rabbitMQServices = rabbitMQServices;
-            _rabbitMQConfiguration = rabbitMQConfiguration;
-            _objectConvertFormat = objectConvertFormat;
+            //_rabbitMQServices = rabbitMQServices;
+            //_rabbitMQConfiguration = rabbitMQConfiguration;
+            //_objectConvertFormat = objectConvertFormat;
             _userListData = userListData;
+            _smtpConfig = smtpConfig;
+            _publisherService = publisherService;
+            //_consumerService = consumerService;
+           // _mailSender = mailSender;
         }
 
 
         public IActionResult Index()
         {
-            users = _userListData.GetData().ToList();
-            post = new Post
-            {
-                Content = "RabbitMQ Deneme icerik",
-                Title = "RabbitMQ Mail Gönderim İşlemi"
-            };
-
-            //kuyruğa mail gönderim olayı tetikleme
-            Publisher.Publisher publisher = new Publisher.Publisher(_rabbitMQServices);
-            publisher.Enqueue(PrepareMessages());
-
-            // kuyruktan mail okuma ve gerekli işlemleri yapması için olayın tetiklenmesi.
-            var receiver = new Receiver(
-                                            _rabbitMQServices, 
-                                            _rabbitMQConfiguration, 
-                                            new MailSender(MailConsts.SmtpFileRoot, _objectConvertFormat), 
-                                            _objectConvertFormat
-                                        );
-            receiver.Start();
+            return View();
             
+        }
+
+
+        [HttpGet]
+        public IActionResult MailSend()
+        { 
             return View();
         }
 
 
-
-        private IEnumerable<MailMessageData> PrepareMessages()
+        [HttpPost]
+        public IActionResult MailSend(PostMailViewModel postMailViewModel)
         {
+            _publisherService.Enqueue(PrepareMessages(postMailViewModel));
+             
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult MailSend2(PostMailViewModel postMailViewModel)
+        {
+            return View(postMailViewModel);
+        }
+        private IEnumerable<MailMessageData> PrepareMessages(PostMailViewModel postMailViewModel)
+        {
+            var users = _userListData.GetData().ToList();
             var messages = new List<MailMessageData>();
             for (int i = 0; i < users.Count; i++)
             {
                 messages.Add(new MailMessageData()
                 {
                     To = users[i].Email.ToString(),
-                    From = "ademolguner@gmail.com",
-                    Subject = post.Title,
-                    Body = post.Content
+                    From = _smtpConfig.User,
+                    Subject = postMailViewModel.Post.Title,
+                    Body = postMailViewModel.Post.Content
                 });
             }
             return messages;
@@ -74,8 +90,6 @@ namespace RabbitMQ.WebUI.Controllers
 
         public IActionResult Privacy()
         {
-            Publisher.Publisher publisher = new Publisher.Publisher(_rabbitMQServices);
-            publisher.Enqueue(PrepareMessages());
             return View();
         }
 

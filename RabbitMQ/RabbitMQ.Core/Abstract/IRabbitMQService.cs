@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RabbitMQ.Core.Abstract
 {
-  public   interface IRabbitMQServices
+  public   interface IRabbitMQService
     {
         IConnection GetConnection();
         IModel GetModel(IConnection connection);

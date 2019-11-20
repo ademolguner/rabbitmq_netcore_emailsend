@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RabbitMQ.Consumer;
 using RabbitMQ.Core.Abstract;
 using RabbitMQ.Core.Concrete;
 using RabbitMQ.Core.Data;
@@ -42,14 +41,15 @@ namespace RabbitMQ.WebUI
             });
 
 
-            services.AddScoped<IRabbitMQServices, RabbitMQService>();
+            services.AddScoped<IRabbitMQService, RabbitMQService>();
             services.AddScoped<IRabbitMQConfiguration, RabbitMQConfiguration>();
             services.AddScoped<IObjectConvertFormat, ObjectConvertFormatManager>();
             services.AddScoped<IMailSender, MailSender>();
             services.AddScoped<IDataModel<User>, UsersDataModel>();
-
-
-
+            services.AddScoped<ISmtpConfiguration, SmtpConfiguration>();
+            services.AddScoped<IPublisherService, PublisherManager>();
+            services.AddScoped<IConsumerService, IConsumerManager>();
+ 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

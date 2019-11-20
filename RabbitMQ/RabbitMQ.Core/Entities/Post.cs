@@ -6,9 +6,10 @@ namespace RabbitMQ.Core.Entities
 {
   public   class Post
     {
-
         public string Title { get; set; }
         public string Content { get; set; }
+        //public List<User> Users { get; set; }
 
+         
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace RabbitMQ.Core.Concrete
 {
-    public class RabbitMQService : IRabbitMQServices
+    public class RabbitMQService : IRabbitMQService
     {
         public IRabbitMQConfiguration _rabbitMQConfiguration;
         public RabbitMQService(IRabbitMQConfiguration RabbitMQConfiguration)

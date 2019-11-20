@@ -14,7 +14,7 @@ namespace RabbitMQ.Core.DependencyResolver
     {
         public override void Load()
         {
-            Bind<IRabbitMQServices>().To<RabbitMQService>().InSingletonScope();
+            Bind<IRabbitMQService>().To<RabbitMQService>().InSingletonScope();
             Bind<IRabbitMQConfiguration>().To<RabbitMQConfiguration>().InSingletonScope();
             Bind<IObjectConvertFormat>().To<ObjectConvertFormatManager>().InSingletonScope();
         }
