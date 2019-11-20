@@ -56,7 +56,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\RabbitMQ.Consumer\RabbitMQ.Consumer.csproj" />
     <ProjectReference Include="..\RabbitMQ.Core\RabbitMQ.Core.csproj" />
   </ItemGroup>
 

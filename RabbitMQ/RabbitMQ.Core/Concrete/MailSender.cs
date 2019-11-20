@@ -16,18 +16,16 @@ namespace RabbitMQ.Core.Concrete
     public class MailSender : IMailSender
     {
         
-        //private readonly SmtpConfig _smtpConfig;
         private readonly ISmtpConfiguration _smtpConfiguration;
-        private readonly IObjectConvertFormat _objectConvertFormat;
-        public MailSender(ISmtpConfiguration smtpConfiguration, IObjectConvertFormat objectConvertFormat)
+        public MailSender(ISmtpConfiguration smtpConfiguration)
         {
-            //_smtpConfig = objectConvertFormat.JsonToObject<SmtpConfig>(File.ReadAllText(smtpConfigPath));
             _smtpConfiguration = smtpConfiguration;
-            _objectConvertFormat = objectConvertFormat;
         }
 
         public async Task<MailSendResult> SendMailAsync(MailMessageData emailMessage)
         {
+            Console.WriteLine($"EmailRabbitMQProcessor SendMailAsync method  => Calısma zamanı: {DateTime.Now.ToShortTimeString()}");
+
             MailSendResult result;
             MailMessage mailMessage = emailMessage.GetMailMessage();
             mailMessage.From = new MailAddress(_smtpConfiguration.User);
@@ -38,7 +36,7 @@ namespace RabbitMQ.Core.Concrete
                     await client.SendMailAsync(mailMessage);
                     string resultMessage = $"donus mesajı metni  {string.Join(",", mailMessage.To)}.";
                     result = new MailSendResult(mailMessage, true, resultMessage);
-                    Console.WriteLine("EmailRabbitMQProcessor running => resultMessage to: " + mailMessage.To);
+                    Console.WriteLine($"EmailRabbitMQProcessor running => resultMessage to:{ mailMessage.To}");
                 }
             }
             catch (Exception ex)

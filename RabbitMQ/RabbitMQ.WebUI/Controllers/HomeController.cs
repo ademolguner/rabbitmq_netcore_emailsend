@@ -12,35 +12,14 @@ namespace RabbitMQ.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly IRabbitMQService _rabbitMQServices;
-        //private readonly IRabbitMQConfiguration _rabbitMQConfiguration;
-        //private readonly IObjectConvertFormat _objectConvertFormat;
         private readonly ISmtpConfiguration _smtpConfig;
         private readonly IPublisherService _publisherService;
-        //private readonly IConsumerService  _consumerService;
-        //private readonly IMailSender _mailSender;
-        //public  Post _post = new Post();
-        //public  List<User> _users = new List<User>();
         private readonly IDataModel<User> _userListData;
-        public HomeController(
-            // IRabbitMQService rabbitMQServices
-            //, IRabbitMQConfiguration rabbitMQConfiguration
-            //, IObjectConvertFormat objectConvertFormat
-             IDataModel<User> userListData
-            , ISmtpConfiguration smtpConfig
-            , IPublisherService publisherService
-            //, IConsumerService consumerService
-            //, IMailSender mailSender
-            )
+        public HomeController(IDataModel<User> userListData, ISmtpConfiguration smtpConfig, IPublisherService publisherService)
         {
-            //_rabbitMQServices = rabbitMQServices;
-            //_rabbitMQConfiguration = rabbitMQConfiguration;
-            //_objectConvertFormat = objectConvertFormat;
             _userListData = userListData;
             _smtpConfig = smtpConfig;
             _publisherService = publisherService;
-            //_consumerService = consumerService;
-           // _mailSender = mailSender;
         }
 
 

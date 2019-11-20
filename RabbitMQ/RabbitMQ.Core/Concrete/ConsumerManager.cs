@@ -59,9 +59,10 @@ namespace RabbitMQ.Core.Concrete
                 _consumer = new EventingBasicConsumer(_channel);
                 _consumer.Received += Consumer_Received;
                 await Task.FromResult(_channel.BasicConsume(queue: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
-                                           autoAck: false,         /* bir mesajı aldıktan sonra bunu anladığına 
-                                                                dair(acknowledgment) kuyruğa bildirimde bulunur ya da timeout gibi vakalar oluştuğunda 
-                                                                mesajı geri çevirmek(Discard) veya yeniden kuyruğa aldırmak(Re-Queue) için dönüşler yapar*/
+                                           autoAck: false,
+                                           /* autoAck: bir mesajı aldıktan sonra bunu anladığına       
+                                              dair(acknowledgment) kuyruğa bildirimde bulunur ya da timeout gibi vakalar oluştuğunda 
+                                              mesajı geri çevirmek(Discard) veya yeniden kuyruğa aldırmak(Re-Queue) için dönüşler yapar*/
                                            consumer: _consumer));
             }
             catch (Exception ex)

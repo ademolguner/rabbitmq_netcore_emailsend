@@ -12,9 +12,9 @@ namespace RabbitMQ.Core.Data
             return new List<User>
             {
                 new User{UserId=1,FirstName="Adem",LastName="Olguner",Email="ademolguner@gmail.com"}
-               //,new User{UserId=2,FirstName="Barış",LastName="Boy",Email="baris.boy@ericssonmsp.com"}
-               //,new User{UserId=3,FirstName="Vacip",LastName="Derici",Email="vacip.derici@ericssonmsp.com"}
-               //,new User{UserId=4,FirstName="Talha",LastName="Seçkin",Email="taha.seckin@ericssonmsp.com"}
+               ,new User{UserId=2,FirstName="Barış",LastName="Boy",Email="baris.boy@ericssonmsp.com"}
+               ,new User{UserId=3,FirstName="Vacip",LastName="Derici",Email="vacip.derici@ericssonmsp.com"}
+               ,new User{UserId=4,FirstName="Talha",LastName="Seçkin",Email="taha.seckin@ericssonmsp.com"}
             };
         }
     }
