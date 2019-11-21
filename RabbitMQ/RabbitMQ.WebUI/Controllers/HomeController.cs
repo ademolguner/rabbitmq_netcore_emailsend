@@ -7,6 +7,7 @@ using RabbitMQ.Core.Abstract;
 using RabbitMQ.Core.Data;
 using System.Linq;
 using RabbitMQ.WebUI.ViewModel;
+using RabbitMQ.Core.Consts;
 
 namespace RabbitMQ.WebUI.Controllers
 {
@@ -40,16 +41,14 @@ namespace RabbitMQ.WebUI.Controllers
         [HttpPost]
         public IActionResult MailSend(PostMailViewModel postMailViewModel)
         {
-            _publisherService.Enqueue(PrepareMessages(postMailViewModel));
-             
+            _publisherService.Enqueue(
+                                       PrepareMessages(postMailViewModel), 
+                                       RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString()
+                                     );
             return View();
         }
 
-        [HttpPost]
-        public IActionResult MailSend2(PostMailViewModel postMailViewModel)
-        {
-            return View(postMailViewModel);
-        }
+       
         private IEnumerable<MailMessageData> PrepareMessages(PostMailViewModel postMailViewModel)
         {
             var users = _userListData.GetData().ToList();
@@ -76,6 +75,12 @@ namespace RabbitMQ.WebUI.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        public IActionResult MailSend2(PostMailViewModel postMailViewModel)
+        {
+            return View(postMailViewModel);
         }
     }
 }

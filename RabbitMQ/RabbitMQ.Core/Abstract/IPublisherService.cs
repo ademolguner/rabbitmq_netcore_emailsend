@@ -1,12 +1,10 @@
-﻿using RabbitMQ.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace RabbitMQ.Core.Abstract
 {
     public interface IPublisherService
     {
-        void Enqueue(IEnumerable<MailMessageData> messages);
+        void Enqueue<T>(IEnumerable<T> queueDataModels, string queueName ) where T: class, new();
     }
 }
+

@@ -12,10 +12,7 @@ namespace RabbitMQ.Core.Concrete
 
         public IConfiguration Configuration { get; }
 
-        public SmtpConfiguration(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public SmtpConfiguration(IConfiguration configuration) => Configuration = configuration;
 
         public  string Host => Configuration.GetSection("SmtpConfig:Host").Value;
         public int Port => Convert.ToInt32(Configuration.GetSection("SmtpConfig:Port").Value);

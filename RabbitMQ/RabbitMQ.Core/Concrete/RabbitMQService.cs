@@ -8,10 +8,10 @@ namespace RabbitMQ.Core.Concrete
 {
     public class RabbitMQService : IRabbitMQService
     {
-        public IRabbitMQConfiguration _rabbitMQConfiguration;
-        public RabbitMQService(IRabbitMQConfiguration RabbitMQConfiguration)
+        private readonly IRabbitMQConfiguration _rabbitMQConfiguration;
+        public RabbitMQService(IRabbitMQConfiguration rabbitMQConfiguration)
         {
-            _rabbitMQConfiguration = RabbitMQConfiguration;
+            _rabbitMQConfiguration = rabbitMQConfiguration ?? throw new ArgumentNullException(nameof(rabbitMQConfiguration));
         }
         public IConnection GetConnection()
         {

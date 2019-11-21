@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json;
-using RabbitMQ.Core.Abstract;
-using System;
-using System.Collections.Generic;
+﻿using RabbitMQ.Core.Abstract;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace RabbitMQ.Core.Concrete
 {

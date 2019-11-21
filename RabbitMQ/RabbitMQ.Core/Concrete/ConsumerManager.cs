@@ -15,8 +15,8 @@ namespace RabbitMQ.Core.Concrete
     {
         private SemaphoreSlim _semaphore;
         // eventler - olaylar
-        public event EventHandler<MailMessageData> MessageReceived;
-        public event EventHandler<MailSendResult> MessageProcessed;
+        public event EventHandler<MailMessageData> _messageReceived;
+        public event EventHandler<MailSendResult> _messageProcessed;
 
         private EventingBasicConsumer _consumer;
         private IModel _channel;
@@ -77,7 +77,7 @@ namespace RabbitMQ.Core.Concrete
             {
                 _semaphore.Wait();
                 MailMessageData message = _objectConvertFormat.JsonToObject<MailMessageData>(Encoding.UTF8.GetString(ea.Body));
-                MessageReceived?.Invoke(this, message);
+                _messageReceived?.Invoke(this, message);
                 // E-Posta akışını başlatma yeri
                 Task.Run(() =>
                 {
@@ -86,7 +86,7 @@ namespace RabbitMQ.Core.Concrete
                         var task = _mailSender.SendMailAsync(message);
                         task.Wait();
                         var result = task.Result;
-                        MessageProcessed?.Invoke(this, result);
+                        _messageProcessed?.Invoke(this, result);
                     }
                     catch (Exception ex)
                     {

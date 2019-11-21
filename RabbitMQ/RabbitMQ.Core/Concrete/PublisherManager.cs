@@ -12,17 +12,15 @@ namespace RabbitMQ.Core.Concrete
     public class PublisherManager : IPublisherService
     {
         private readonly IRabbitMQService _rabbitMQServices;
-
-        public PublisherManager(IRabbitMQService rabbitMQServices)
-        {
-            _rabbitMQServices = rabbitMQServices;
-        }
+        public PublisherManager(IRabbitMQService rabbitMQServices) => _rabbitMQServices = rabbitMQServices;
 
         /// <summary>
-        ///  publisher işlemi
+        /// 
         /// </summary>
-        /// <param name="messages"></param>
-        public void Enqueue(IEnumerable<MailMessageData> messages)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="queueDataModels">Herhangi bir tipte gönderilebilir where koşullaırına uyan</param>
+        /// <param name="queueName">Queue kuyrukta hangi isimde tutulacağı bilgisi operasyon istek zamanı gönderilebilir.</param>
+        public void Enqueue<T>(IEnumerable<T> queueDataModels, string queueName) where T : class, new()
         {
             try
             {
@@ -39,11 +37,11 @@ namespace RabbitMQ.Core.Concrete
                     properties.Persistent = true;
                     properties.Expiration = RabbitMQConsts.MessagesTTL.ToString();
 
-                    foreach (var message in messages)
+                    foreach (var queueDataModel in queueDataModels)
                     {
-                        var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+                        var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(queueDataModel));
                         channel.BasicPublish(exchange: "",
-                                             routingKey: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
+                                             routingKey: queueName,
                                              basicProperties: properties,
                                              body: body);
                     }

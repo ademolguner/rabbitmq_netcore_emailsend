@@ -9,6 +9,5 @@ namespace RabbitMQ.Core.Abstract
         string HostName { get; }
         string UserName { get; }
         string Password { get; }
-         
     }
 }
