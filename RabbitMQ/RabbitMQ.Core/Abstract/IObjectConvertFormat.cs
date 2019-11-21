@@ -6,8 +6,8 @@ namespace RabbitMQ.Core.Abstract
 {
    public interface IObjectConvertFormat
     {
-        T JsonToObject<T>(string jsonString);
-        string ObjectToJson<T>(T message);
-        T ParseObjectDataArray<T>(byte[] rawBytes);
+        T JsonToObject<T>(string jsonString) where T: class, new();
+        string ObjectToJson<T>(T entityObject) where T : class, new();
+        T ParseObjectDataArray<T>(byte[] rawBytes) where T : class, new();
     }
 }

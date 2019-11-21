@@ -13,7 +13,7 @@ namespace RabbitMQ.Core.Concrete
         {
             _rabbitMQConfiguration = rabbitMQConfiguration ?? throw new ArgumentNullException(nameof(rabbitMQConfiguration));
         }
-        public IConnection GetConnection()
+        private IConnection GetConnection()
         {
             var factory = new ConnectionFactory()
             {
@@ -24,9 +24,9 @@ namespace RabbitMQ.Core.Concrete
             return factory.CreateConnection();
         }
 
-        public IModel GetModel(IConnection connection)
+        public IModel GetModel()
         {
-            return connection.CreateModel();
+            return GetConnection().CreateModel();
         }
     }
 }

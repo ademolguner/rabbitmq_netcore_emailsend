@@ -12,7 +12,12 @@ namespace RabbitMQ.Core.Concrete
     public class PublisherManager : IPublisherService
     {
         private readonly IRabbitMQService _rabbitMQServices;
-        public PublisherManager(IRabbitMQService rabbitMQServices) => _rabbitMQServices = rabbitMQServices;
+        private readonly IObjectConvertFormat _objectConvertFormat;
+        public PublisherManager(IRabbitMQService rabbitMQServices, IObjectConvertFormat objectConvertFormat)
+        {
+            _rabbitMQServices = rabbitMQServices;
+            _objectConvertFormat = objectConvertFormat;
+        }
 
         /// <summary>
         /// 
@@ -24,10 +29,9 @@ namespace RabbitMQ.Core.Concrete
         {
             try
             {
-                using (var connection = _rabbitMQServices.GetConnection())
-                using (var channel = connection.CreateModel())
+                using (var channel = _rabbitMQServices.GetModel())
                 {
-                    channel.QueueDeclare(queue: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
+                    channel.QueueDeclare(queue: queueName,
                                          durable: true,      // ile in-memory mi yoksa fiziksel olarak mı saklanacağı belirlenir.
                                          exclusive: false,   // yalnızca bir bağlantı tarafından kullanılır ve bu bağlantı kapandığında sıra silinir - özel olarak işaretlenirse silinmez
                                          autoDelete: false,  // en son bir abonelik iptal edildiğinde en az bir müşteriye sahip olan kuyruk silinir
@@ -39,7 +43,7 @@ namespace RabbitMQ.Core.Concrete
 
                     foreach (var queueDataModel in queueDataModels)
                     {
-                        var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(queueDataModel));
+                        var body = Encoding.UTF8.GetBytes(_objectConvertFormat.ObjectToJson(queueDataModel));
                         channel.BasicPublish(exchange: "",
                                              routingKey: queueName,
                                              basicProperties: properties,
@@ -54,3 +58,5 @@ namespace RabbitMQ.Core.Concrete
         }
     }
 }
+
+
