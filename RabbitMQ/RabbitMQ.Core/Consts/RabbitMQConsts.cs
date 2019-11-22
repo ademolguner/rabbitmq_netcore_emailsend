@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RabbitMQ.Core.Consts
 {
-    public class RabbitMQConsts
+    public static class RabbitMQConsts
     {
 
         /// yaşam süresi
