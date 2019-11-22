@@ -48,7 +48,7 @@ namespace RabbitMQ.WebUI
             services.AddScoped<IDataModel<User>, UsersDataModel>();
             services.AddScoped<ISmtpConfiguration, SmtpConfiguration>();
             services.AddScoped<IPublisherService, PublisherManager>();
-            services.AddScoped<IConsumerService, IConsumerManager>();
+            services.AddScoped<IConsumerService, ConsumerManager>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

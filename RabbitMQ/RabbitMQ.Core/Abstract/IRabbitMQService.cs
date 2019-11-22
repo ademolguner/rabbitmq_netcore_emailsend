@@ -7,6 +7,7 @@ namespace RabbitMQ.Core.Abstract
 {
     public interface IRabbitMQService
     {
-        IModel GetModel();
+        IConnection GetConnection();
+        IModel GetModel(IConnection connection);
     }
 }

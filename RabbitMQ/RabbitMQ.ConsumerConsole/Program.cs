@@ -30,18 +30,14 @@ namespace RabbitMQ.ConsumerConsole
                 .AddSingleton<ISmtpConfiguration, SmtpConfiguration>()
                 .AddSingleton<IMailSender, MailSender>()
                 .AddSingleton<IDataModel<User>, UsersDataModel>()
-                .AddSingleton<IConsumerService, IConsumerManager>()
+                .AddSingleton<IConsumerService, ConsumerManager>()
                 .BuildServiceProvider();
-
-            Console.WriteLine("serviceProvider ve Dependency injectionlar okundu.");
 
             var consumerService = serviceProvider.GetService<IConsumerService>();
             Console.WriteLine("consumerService alındı.");
             Console.WriteLine($"consumerService.Start() başladı: {DateTime.Now.ToShortTimeString()}");
             await consumerService.Start();
             Console.WriteLine($"consumerService.Start() bitti:  {DateTime.Now.ToShortTimeString()}");
-
         }
-
     }
 }

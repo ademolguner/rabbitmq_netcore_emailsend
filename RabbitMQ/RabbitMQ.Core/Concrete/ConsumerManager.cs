@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RabbitMQ.Core.Concrete
 {
-    public class IConsumerManager : IConsumerService
+    public class ConsumerManager : IConsumerService
     {
         private SemaphoreSlim _semaphore;
         // eventler - olaylar
@@ -20,12 +20,13 @@ namespace RabbitMQ.Core.Concrete
 
         private EventingBasicConsumer _consumer;
         private IModel _channel;
+        private IConnection _connection;
 
         private readonly IRabbitMQService _rabbitMQServices;
         private readonly IObjectConvertFormat _objectConvertFormat;
         private readonly IMailSender _mailSender;
 
-        public IConsumerManager(
+        public ConsumerManager(
             IRabbitMQService rabbitMQServices,
             IMailSender mailSender,
             IObjectConvertFormat objectConvertFormat
@@ -41,7 +42,8 @@ namespace RabbitMQ.Core.Concrete
             try
             {
                 _semaphore = new SemaphoreSlim(RabbitMQConsts.ParallelThreadsCount);
-                _channel = _rabbitMQServices.GetModel();
+                _connection = _rabbitMQServices.GetConnection();
+                _channel = _rabbitMQServices.GetModel(_connection);
                 _channel.QueueDeclare(queue: RabbitMQConsts.RabbitMqConstsList.QueueNameEmail.ToString(),
                                      durable: true,
                                      exclusive: false,
