@@ -58,7 +58,7 @@ namespace RabbitMQ.Core.Concrete
         {
             SmtpClient client = new SmtpClient(config.Host, config.Port)
             {
-                EnableSsl = config.UseSSL,
+                EnableSsl = config.UseSsl,
                 UseDefaultCredentials = !(string.IsNullOrWhiteSpace(config.User) && string.IsNullOrWhiteSpace(config.Password))
             };
             if (client.UseDefaultCredentials == true)

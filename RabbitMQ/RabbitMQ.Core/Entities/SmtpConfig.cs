@@ -10,6 +10,6 @@ namespace RabbitMQ.Core.Entities
         public int Port { get; set; }
         public string User { get; set; }
         public string Password { get; set; }
-        public bool UseSSL { get; set; }
+        public bool UseSsl { get; set; }
     }
 }

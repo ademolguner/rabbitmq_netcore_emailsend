@@ -9,8 +9,7 @@ namespace RabbitMQ.Core.Concrete
 {
     public class SmtpConfiguration : ISmtpConfiguration
     {
-
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public SmtpConfiguration(IConfiguration configuration) => Configuration = configuration;
 
@@ -28,7 +27,7 @@ namespace RabbitMQ.Core.Concrete
                 Password = Password,
                 Port = Port,
                 User = User,
-                UseSSL = UseSSL
+                UseSsl = UseSSL
             };
         }
     }
