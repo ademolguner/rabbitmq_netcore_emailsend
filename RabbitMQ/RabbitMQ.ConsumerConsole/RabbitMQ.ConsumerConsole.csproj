@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="bin\Debug\netcoreapp3.0\project.json" />
+    <Content Include="bin\Debug\netcoreapp3.0\project.json" />
   </ItemGroup>
 
   <ItemGroup>

@@ -50,6 +50,7 @@ namespace RabbitMQ.Core.Concrete
                         var body = Encoding.UTF8.GetBytes(_objectConvertFormat.ObjectToJson(queueDataModel));
                         _channel.BasicPublish(exchange: "",
                                              routingKey: queueName,
+                                             mandatory: false,
                                              basicProperties: properties,
                                              body: body);
                     }
